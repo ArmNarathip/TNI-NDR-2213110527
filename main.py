@@ -1,10 +1,8 @@
 import streamlit as st
 from sklearn.linear_model import LinearRegression
-import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
-import datetime
+
 
 # หัวเรื่อง
 st.markdown("# Meta Platforms (META)")
