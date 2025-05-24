@@ -1,0 +1,7 @@
+streamlit
+pandas
+matplotlib.pyplot
+sklearn.linear_model
+plotly.express
+plotly.graph_objects
+numpy

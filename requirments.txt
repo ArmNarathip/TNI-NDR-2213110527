@@ -1,4 +1,0 @@
-streamlit
-pandas
-matplotlib.pyplot
-sklearn.linear_model
