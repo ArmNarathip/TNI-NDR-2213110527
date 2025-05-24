@@ -40,56 +40,63 @@ max_price = df_sorted["Price"].max()
 min_price = df_sorted["Price"].min()
 mean_price = df_sorted["Price"].mean()
 
+
+#call mata_stock_info.txt
+with open("meta_stock_info.txt", "r", encoding="utf-8") as f:
+    meta_text = f.read()
+
+
 # -----------------------------
 # Sidebar Info
 # -----------------------------
+
 with st.sidebar:
-    st.title("ℹ️ Stock Information")
+    st.markdown(f"""
+    ### 📊 Facebook (META) Stock Statistics
+    - 📅 Present: **${latest_price:.2f}**
+    - 🔺 High: **${max_price:.2f}**
+    - 🔻 Low: **${min_price:.2f}**
+    - 📈 Mean: **${mean_price:.2f}**
+    """)
+    st.write("")  # Spacer
+
+    st.title("ℹ️ Stock Information") 
+    # แสดงข้อมูลแบบเต็ม
     st.markdown(
-        """
+        f"""
         <div style="
             background-color: var(--secondary-background-color);
             border-left: 6px solid var(--primary-color);
             padding: 1rem;
             border-radius: 8px;
-            font-size: 1.05rem;
+            font-size: 0.9rem;
             color: var(--text-color);
         ">
-            <strong>Meta Platforms, Inc.</strong> บริษัทแม่ของ Facebook ดำเนินธุรกิจที่ครอบคลุมแพลตฟอร์มโซเชียลมีเดียชั้นนำอย่าง Facebook, Instagram, Messenger และ WhatsApp โดยสร้างรายได้หลักจากการโฆษณาดิจิทัล พร้อมมุ่งเน้นการพัฒนาเทคโนโลยี Metaverse ผ่าน Reality Labs ซึ่งรวมถึงฮาร์ดแวร์ AR/VR อย่าง Oculus และแพลตฟอร์มโลกเสมือนจริง เพื่อสนับสนุนนวัตกรรมด้านการเชื่อมต่อและการทำงานแห่งอนาคต.
+            <strong>Meta Platforms, Inc.</strong> {meta_text}
             <br><br>
-            <span style="font-size: 0.85rem;">
-                ที่มา: <a href="https://www.liberator.co.th/article/view/us-stock-meta" target="_blank" style="color: var(--primary-color); text-decoration: none;">Liberator</a>
+            <span style="font-size: 0.85rem; ">
+                Source: <a href="https://www.nasdaq.com/market-activity/stocks/meta" target="_blank" style="color: var(--primary-color); text-decoration: none;">nasdaq.com</a>
             </span>
         </div>
         """,
         unsafe_allow_html=True
     )
 
-    # เว้น 1 บรรทัด
-    st.write("")
-
-    st.markdown(f"""
-    ### 📊 META Stock S tatistics
-    - 📅 ปัจจุบัน: **${latest_price:.2f}**
-    - 🔺 สูงสุด: **${max_price:.2f}**
-    - 🔻 ต่ำสุด: **${min_price:.2f}**
-    - 📈 เฉลี่ย: **${mean_price:.2f}**
-    """)
 
 # -----------------------------
 # Filter Timeframe
 # -----------------------------
 timeframes = {
-    "1 วัน": 1,
-    "7 วัน": 7,
-    "30 วัน": 30,
-    "90 วัน": 90,
-    "ทั้งหมด": "max"
+    "1 Day": 1,
+    "7 Day": 7,
+    "30 Day": 30,
+    "90 Day": 90,
+    "All": "max"
 }
-choice = st.selectbox("เลือกช่วงเวลา", list(timeframes.keys()), index=1)
+choice = st.selectbox("Time Frame (6 Month)", list(timeframes.keys()), index=1)
 filtered_df = df if timeframes[choice] == "max" else df.head(timeframes[choice])
 
-st.markdown(f"#### 📆 ข้อมูลย้อนหลัง: {choice}")
+st.markdown(f"#### 📆 Meta Platform Stock Price History: {choice}")
 filtered_df = filtered_df.reset_index(drop=True)
 filtered_df.index += 1
 filtered_df["Date"] = filtered_df["Date"].dt.date
@@ -118,8 +125,8 @@ def calculate_rsi(df, col='Price', window=14):
 # -----------------------------
 # Chart Display
 # -----------------------------
-st.title("📈 กราฟแนวโน้มราคาหุ้น")
-chart_type = st.selectbox("เลือกกราฟ", ["Linear Regression", "Interactive", "MACD", "RSI"])
+st.title("📈 Facebook (META) Stock Chart")
+chart_type = st.selectbox("Select Indicators Chart", ["Linear Regression", "Interactive", "MACD", "RSI"])
 
 st.subheader("Facebook (META) Stock Chart")
 if chart_type == "Linear Regression":
