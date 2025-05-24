@@ -28,7 +28,7 @@ with col2:
 # -----------------------------
 # Load & Prepare Data
 # -----------------------------
-df = pd.read_excel("C:\\NDR Project Web\\TNI-NDR-2213110527\\Meta Platforms Stock Price History.xlsx")
+df = pd.read_excel("Meta Platforms Stock Price History.xlsx")
 df.columns = ["Date", "Price", "Open", "High", "Low", "Vol.", "Change%", "NASDAQ index"]
 df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
 df.dropna(inplace=True)
