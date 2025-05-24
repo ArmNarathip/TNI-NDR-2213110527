@@ -1,6 +1,7 @@
+# requirements.txt
 streamlit
 pandas
 matplotlib
-scikit-learn
 plotly
+scikit-learn
 numpy
