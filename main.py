@@ -6,13 +6,32 @@ import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 
+
 # หัวเรื่อง 
-st.markdown("# Meta Platforms (META)")
-st.write("(🇺🇸) NASDAQ Currency in USD")
+col1, col2 = st.columns([1, 5])  # ปรับขนาดตามความเหมาะสม
+
+with col1:
+    st.image("https://upload.wikimedia.org/wikipedia/commons/0/05/Meta_Platforms_Inc._logo_%28cropped%29.svg", width=150)
+
+with col2:
+    st.title("Meta Platforms (META)")
+    
+    st.markdown(
+        """
+        <div style='display: flex; align-items: center; gap: 8px; font-size: 1.1rem;'>
+            <img src='https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg' width='24' height='24'>
+            <span>NASDAQ Currency in USD</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+st.write("")
 
 # โหลดข้อมูลจาก Excel
 df = pd.read_excel(r"C:\\NDR Project Web\\TNI-NDR-2213110527\\Meta Platforms Stock Price History.xlsx")
 df.columns = ["Date", "Price", "Open", "High", "Low", "Vol.", "Change%", "NASDAQ index"]
+
 
 # แปลง Date เป็น datetime
 df["Date"] = pd.to_datetime(df["Date"], format="%m/%d/%Y", errors="coerce")
@@ -20,6 +39,44 @@ df = df.dropna(subset=["Date"])
 df = df.dropna()
 df = df.sort_values("Date", ascending=False)
 df_sorted = df.sort_values("Date")
+
+latest_price = df_sorted["Price"].iloc[-1]
+max_price = df_sorted["Price"].max()
+min_price = df_sorted["Price"].min()
+mean_price = df_sorted["Price"].mean()
+
+# สไลด์บาร์       
+with st.sidebar:
+        st.title("ℹ️Stock Infomations")
+        st.markdown("""
+        <div style="
+            background-color: #f9f9f9;
+            border-left: 6px solid #2e7bcf;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        ">
+            <strong>Meta Platforms, Inc.</strong> บริษัทแม่ของ Facebook ดำเนินธุรกิจที่ครอบคลุมแพลตฟอร์มโซเชียลมีเดียชั้นนำอย่าง Facebook, Instagram, Messenger และ WhatsApp โดยสร้างรายได้หลักจากการโฆษณาดิจิทัล พร้อมมุ่งเน้นการพัฒนาเทคโนโลยี Metaverse ผ่าน Reality Labs ซึ่งรวมถึงฮาร์ดแวร์ AR/VR อย่าง Oculus และแพลตฟอร์มโลกเสมือนจริง เพื่อสนับสนุนนวัตกรรมด้านการเชื่อมต่อและการทำงานแห่งอนาคต.
+            <br><br>
+            <span style="font-size: 0.85rem; color: #555;">
+                ที่มา: <a href="https://www.liberator.co.th/article/view/us-stock-meta" target="_blank" style="color: #2e7bcf; text-decoration: none;">https://www.liberator.co.th/article/view/us-stock-meta</a>
+            </span>
+        </div>
+        """, unsafe_allow_html=True)
+        
+
+        st.header("")
+        st.markdown(f"""
+    ### 📊 สถิติราคาหุ้น META Platforms, Inc.
+    - 📅 ราคาปัจจุบัน: **${latest_price:.2f}**
+    - 🔺 ราคาสูงสุด: **${max_price:.2f}**
+    - 🔻 ราคาต่ำสุด: **${min_price:.2f}**
+    - 📈 ราคาเฉลี่ย: **${mean_price:.2f}**
+    """)
+    
+
 
 # ตัวเลือกช่วงเวลา
 timeframes = {
@@ -43,7 +100,7 @@ with col1:
         filtered_df = df.iloc[:n]
 
 with col2:
-    st.markdown(f"<div style='display: flex; align-items: center; height: 100%; font-size: 1.3rem; font-weight: bold;'>ข้อมูลย้อนหลัง: {choice}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='display: flex; align-items: center; height: 100%; font-size: 1.3rem; font-weight: bold;'>◀️ข้อมูลย้อนหลัง: {choice}</div>", unsafe_allow_html=True)
 
 filtered_df = filtered_df.reset_index(drop=True)
 filtered_df.index += 1
@@ -98,7 +155,7 @@ def plot_rsi(df):
     fig.update_layout(title='RSI (14 วัน)', xaxis_title='Date', yaxis_title='RSI', yaxis_range=[0, 100], hovermode='x unified')
     return fig
 
-st.title("แนวโน้มราคาหุ้น (Chart)")
+st.title("📈แนวโน้มราคาหุ้น (Chart)")
 
 # ตัวเลือกดูกราฟ
 chart_option = st.selectbox("", [
@@ -109,8 +166,8 @@ chart_option = st.selectbox("", [
 ])
 
 # แสดงกราฟตามตัวเลือก
+st.subheader("Facebook (META) Stock Chart 6 Month Before")
 if chart_option == "Linear Regression Chart":
-    st.subheader("Facebook (META) Stock Chart 6 Month Before")
     X = df_sorted["Date"].apply(lambda x: x.toordinal()).values.reshape(-1, 1)
     y = df_sorted["Price"].values
     model = LinearRegression()
@@ -140,3 +197,5 @@ elif chart_option == "MACD Chart":
 elif chart_option == "RSI Chart":
     df_rsi = calculate_rsi(df_sorted)
     st.plotly_chart(plot_rsi(df_rsi), use_container_width=True)
+
+
