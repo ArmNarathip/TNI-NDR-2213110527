@@ -23,3 +23,7 @@ This repository for ITE-417 NDR Project
 ## Streamlit 
 
 -  https://armnarathipchj.streamlit.app
+
+## Presentation
+
+-  https://www.canva.com/design/DAGobP4AgZ0/Q1O3_Jy58EGnRPFEIKLfdQ/edit?utm_content=DAGobP4AgZ0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
